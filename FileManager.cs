@@ -19,6 +19,7 @@ namespace PE_File_Exporter
         List<cListfileEntry> ImportLabels;
         string HeaderName;
         string ImportName;      //todo: chack is correct that way, don't know why there are names at all
+        private bool CreateOwnThread;
 
         internal FileManager()
         {
@@ -26,6 +27,7 @@ namespace PE_File_Exporter
             UnassignedLabels = new List<cListfileEntry>();
             ExportLabels = new List<cListfileEntry>();
             ImportLabels = new List<cListfileEntry>();
+            CreateOwnThread = false;
         }
 
         internal bool ReadNewListFile()
@@ -157,6 +159,10 @@ namespace PE_File_Exporter
         internal void Export(byte[] MD5)
         {
             List<ushort> Output = new List<ushort>();
+            List<ushort> ImportTable = CreateImportTable();
+            List<ushort> ExportTable = CreateExportTable();
+            List<ushort> Executable = ObtainExecutableImage();
+            ushort ExecutableOffset = (ushort)(Output.Count + 4 + ImportLabels.Count + ExportTable.Count);
             ushort[] DataTemp;
             Output.Add(0x010c);     //Header
             Output.Add(0xFFFF);     //next header, for now not existant 
@@ -167,11 +173,34 @@ namespace PE_File_Exporter
             DataTemp = DCPU_Utilitys.cHexInterface.ConverToUshortArray(HeaderName);
             foreach (ushort Item in DataTemp)
                 Output.Add(Item);
-            Output.Add(0x0000);        //RVA entry point    TODO: correct from files with own threads
-
+            if (CreateOwnThread)        //RVA entry point
+                Output.Add(ExecutableOffset);
+            else
+                Output.Add(0x0000);
+            Output.Add((ushort)(Output.Count + 3));        //Import Table Adress
+            Output.Add((ushort)(Output.Count + 2 + ImportLabels.Count));        //Export Table Adress
+            Output.Add((ushort)(Output.Count + 1 + ImportLabels.Count + ExportTable.Count + Executable.Count));        //relocation Table Adress
+            Output.Add((ushort)Executable.Count);        //Size of the Executable image TODO: calaculate that first
+            foreach (ushort Item in ImportLabels)
+                Output.Add((ushort)Item + ExecutableOffset);
 
 
             
+        }
+
+        private List<ushort> ObtainExecutableImage()
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<ushort> CreateExportTable()
+        {
+            throw new NotImplementedException();
+        }
+
+        private List<ushort> CreateImportTable()
+        {
+            throw new NotImplementedException();
         }
     }
 }
