@@ -162,17 +162,12 @@ namespace PE_File_Exporter
             List<ushort> ImportTable = CreateImportTable();
             List<ushort> ExportTable = CreateExportTable();
             List<ushort> Executable = ObtainExecutableImage();
+            List<ushort> MD5List = DCPU_Utilitys.cHexInterface.ConvertToUshortList(MD5);
+            List<ushort> RelocationTable = CreateRelocationTable();
             ushort ExecutableOffset = (ushort)(Output.Count + 4 + ImportLabels.Count + ExportTable.Count);
-            ushort[] DataTemp;
             Output.Add(0x010c);     //Header
             Output.Add(0xFFFF);     //next header, for now not existant 
-            while (this.HeaderName.Length < 20)
-                HeaderName += " ";
-            if (HeaderName.Length > 20)
-                HeaderName = HeaderName.Substring(0, 20);
-            DataTemp = DCPU_Utilitys.cHexInterface.ConverToUshortArray(HeaderName);
-            foreach (ushort Item in DataTemp)
-                Output.Add(Item);
+            Output.AddRange(MD5List);
             if (CreateOwnThread)        //RVA entry point
                 Output.Add(ExecutableOffset);
             else
@@ -180,17 +175,34 @@ namespace PE_File_Exporter
             Output.Add((ushort)(Output.Count + 3));        //Import Table Adress
             Output.Add((ushort)(Output.Count + 2 + ImportLabels.Count));        //Export Table Adress
             Output.Add((ushort)(Output.Count + 1 + ImportLabels.Count + ExportTable.Count + Executable.Count));        //relocation Table Adress
-            Output.Add((ushort)Executable.Count);        //Size of the Executable image TODO: calaculate that first
-            foreach (ushort Item in ImportLabels)
-                Output.Add((ushort)Item + ExecutableOffset);
-
+            Output.Add((ushort)Executable.Count);        //Size of the Executable image 
+            foreach (ushort Item in ImportTable)
+                Output.Add((ushort)(Item + ExecutableOffset));
+            foreach (ushort Item in ExportTable)
+                Output.Add((ushort)(Item + ExecutableOffset));
+            Output.AddRange(Executable);
+            foreach (ushort Item in RelocationTable)
+                Output.Add((ushort)(Item + ExecutableOffset));
 
             
         }
 
-        private List<ushort> ObtainExecutableImage()
+        private List<ushort> CreateRelocationTable()
         {
             throw new NotImplementedException();
+        }
+
+        private List<ushort> ObtainExecutableImage()
+        {
+            List<ushort> Result = new List<ushort>();
+            List<ushort> Temp;
+            foreach (cListfileEntry Item in ActualReadOut)
+            {
+                Temp = Item.GetBinary();
+                foreach (ushort ItemUshort in Temp)
+                    Result.Add(ItemUshort);
+            }
+            return Result;
         }
 
         private List<ushort> CreateExportTable()

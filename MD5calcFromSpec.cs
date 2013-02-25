@@ -21,8 +21,8 @@ namespace PE_File_Exporter
 
         private static void AddToBuffer(byte[] Buffer, int startIndex, int Count, string str)
         {
-            char Temp = str.ToCharArray();
-            for (int i = 0; i < Count; i++)
+            char [] Temp = str.ToCharArray();
+            for (int i = 0; i < Temp.Length; i++)
                 Buffer[startIndex + i] = (byte)Temp[i];
         }
 
@@ -32,6 +32,7 @@ namespace PE_File_Exporter
                 str += " ";
             if (str.Length > 20)
                 str = str.Substring(0, 20);
+            return str;
         }
     }
 }

@@ -247,5 +247,14 @@ namespace DCPU_Utilitys
             }
             return Result;
         }
+        static internal List<ushort> ConvertToUshortList(byte[] Input)
+        {
+            List<ushort> result = new List<ushort>();
+            for (int i = 0; i < Input.Length - 1; i += 2)
+            {
+                result.Add((ushort)(Input[i] | ((ushort)Input[i + 1] << 8)));
+            }
+            return result;
+        }
     }
 }

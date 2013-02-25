@@ -5,6 +5,11 @@ using System.Text;
 
 namespace PE_File_Exporter
 {
+    class NoInstructionException:Exception
+    {}
+    class NoArgumentB : Exception
+    { }
+
     class cListfileEntry
     {
         private string ListReadout;
@@ -15,6 +20,7 @@ namespace PE_File_Exporter
         private int LineNumber;
         private string AssemblerCode;
         private ListFiletype HowTo;
+        private bool Instruction;
 
         internal cListfileEntry(string ReadOut)
         {
@@ -26,6 +32,7 @@ namespace PE_File_Exporter
             LineNumber = 0;
             AssemblerCode = "";
             HowTo = ListFiletype.unknown;
+            Instruction = false;
         }
 
         internal bool IsEmpty()
@@ -37,7 +44,10 @@ namespace PE_File_Exporter
         {
             ListReadout += Convert.ToString(NewChar);
         }
-
+        #region Parse
+        /// <summary>
+        /// parses the list file entry accordingly
+        /// </summary>
         internal void Parse()
         {
             string Temp = ListReadout;
@@ -121,10 +131,75 @@ namespace PE_File_Exporter
                         Label = true;
                     }
                 }
+                Instruction = IsInstruction();
             }
             else
             {
                 throw new Exception("The way to Interpret information was not specified. Call SetHowTo to specify.");
+            }
+        }
+        #endregion
+
+        internal bool IsInstruction()
+        {
+            string[] Parts = AssemblerCode.Split(' ');
+            if (HowTo == ListFiletype.Organic)          //probably would also work with other assemblers...
+            {
+                if (Parts.Length > 0)
+                {
+                    Parts[0] = Parts[0].Trim();
+                    Parts[0] = Parts[0].ToLower();
+                    switch (Parts[0])
+                    {
+                        case "set":
+                        case "add":
+                        case "sub":
+                        case "mul":
+                        case "mli":
+                        case "div":
+                        case "dvi":
+                        case "mod":
+                        case "mdi":
+                        case "and":
+                        case "bor":
+                        case "xor":
+                        case "shr":
+                        case "asr":
+                        case "shl":
+                        case "ifb":
+                        case "ifc":
+                        case "ife":
+                        case "ifn":
+                        case "ifg":
+                        case "ifa":
+                        case "ifl":
+                        case "ifu":
+                        case "adx":
+                        case "sbx":
+                        case "sti":
+                        case "std":
+                        case "jsr":
+                        case "int":
+                        case "iag":
+                        case "ias":
+                        case "rfi":
+                        case "iaq":
+                        case "hwn":
+                        case "hwq":
+                        case "hwi":
+                            return true;
+                        default:
+                            return false;
+                    }
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -178,6 +253,86 @@ namespace PE_File_Exporter
             }
             else
                 throw new Exception("This list entry is not a Label.");
+        }
+        internal ushort getOpcode()
+        {
+            if (Instruction)
+                return Opcodes[0];
+            else
+                throw new NoInstructionException();
+        }
+        internal ushort getArgA()
+        {
+            if (Instruction)
+                return Opcodes[1];
+            else
+                throw new NoInstructionException();
+        }
+        internal ushort getArgB()
+        {
+            if (Instruction)
+            {
+                if (Opcodes.Count == 3)
+                    return Opcodes[2];
+                else
+                    throw new NoArgumentB();
+            }
+            else
+                throw new NoInstructionException();
+        }
+        internal List<ushort> GetBinary()
+        {
+            if (Instruction)
+            {
+                return Opcodes;
+            }
+            else
+                throw new NoInstructionException();
+        }
+
+        /// <summary>
+        /// will return the abolute adresses addresses  of the Labels (not the addresses they are referring to!)
+        /// </summary>
+        /// <returns>the List of the Adresses, can be empty, but not null</returns>
+        internal List<ushort> GetRefenencedLabels()
+        {
+            //How to? well, we know what the actual opcode is. Thus, just parse it, and determine whether A or B are referencing...
+            List<ushort> Result = new List<int>();
+            if (IsInstruction())
+            {
+                ushort Temp = (Opcodes[0] >> 10) & 0x3F;
+                if (IsReferring(Temp))
+                    Result.Add(Address + 1);
+                Temp = (Opcodes[0] >> 5) & 0x1F;
+                if (IsReferring(Temp))
+                    Result.Add(Address + Opcodes.Count -1);     //B will always refer to the last Instruction
+            }
+            else if (AssemblerCode.Substring(0, 4) == ".dat")    //in case of Vector Tables...
+            {
+                string[] array = AssemblerCode.Split(' ',StringSplitOptions.RemoveEmptyEntries);
+            }
+            return Result;
+        }
+
+
+        private bool IsReferring(ushort Temp)
+        {
+            switch (Temp)
+            {
+                case 0x10:
+                case 0x11:
+                case 0x12:
+                case 0x13:
+                case 0x14:
+                case 0x15:
+                case 0x16:
+                case 0x17:
+                case 0x1A:
+                case 0x1E:
+                    return true;
+                default:
+                    return false;
+            }
         }
     }
 }
