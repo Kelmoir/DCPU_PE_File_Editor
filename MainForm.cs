@@ -74,7 +74,7 @@ namespace PE_File_Exporter
 
         private void btImportListEntryUp_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.SwitchElements(ListName.Import, lbExportEntrys.SelectedIndex - 1))
+            if (WorkingFile.SwitchElements(ListName.Import, lbImportEntrys.SelectedIndex - 1))
             {
                 lbImportEntrys.SelectedIndex--;
                 UpdateLists();
@@ -83,7 +83,7 @@ namespace PE_File_Exporter
 
         private void btImportListEntryDown_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.SwitchElements(ListName.Import, lbExportEntrys.SelectedIndex))
+            if (WorkingFile.SwitchElements(ListName.Import, lbImportEntrys.SelectedIndex))
             {
                 lbImportEntrys.SelectedIndex++;
                 UpdateLists();
@@ -95,7 +95,6 @@ namespace PE_File_Exporter
         {
             WorkingFile.Export(MD5calcFromSpec.CalcMD5(tbSpecFunction.Text, tbSpecName.Text, tbSpecPublisher.Text, cbRevMaj.SelectedIndex, cbRefMin.SelectedIndex));
         }
-
 
     }
 }

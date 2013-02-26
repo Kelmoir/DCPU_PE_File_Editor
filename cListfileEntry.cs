@@ -297,42 +297,55 @@ namespace PE_File_Exporter
         internal List<ushort> GetRefenencedLabels()
         {
             //How to? well, we know what the actual opcode is. Thus, just parse it, and determine whether A or B are referencing...
-            List<ushort> Result = new List<int>();
-            if (IsInstruction())
+            List<ushort> Result = new List<ushort>();
+            //if (IsInstruction())
+            //{
+            //    ushort Temp = (Opcodes[0] >> 10) & 0x3F;
+            //    if (IsReferring(Temp))
+            //        Result.Add((ushort)(Address + 1));
+            //    Temp = (Opcodes[0] >> 5) & 0x1F;
+            //    if (IsReferring(Temp))
+            //        Result.Add((ushort)(Address + Opcodes.Count -1));     //B will always refer to the last Instruction
+            //}
+            //else 
+            if (Instruction || AssemblerCode.Substring(0, 4) == ".dat")    //in case of Vector Tables...
             {
-                ushort Temp = (Opcodes[0] >> 10) & 0x3F;
-                if (IsReferring(Temp))
-                    Result.Add(Address + 1);
-                Temp = (Opcodes[0] >> 5) & 0x1F;
-                if (IsReferring(Temp))
-                    Result.Add(Address + Opcodes.Count -1);     //B will always refer to the last Instruction
-            }
-            else if (AssemblerCode.Substring(0, 4) == ".dat")    //in case of Vector Tables...
-            {
-                string[] array = AssemblerCode.Split(' ',StringSplitOptions.RemoveEmptyEntries);
+                string[] seperator = new string[1];
+                seperator[0] = " ";
+                string[] array = AssemblerCode.Split(seperator,StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 1; i < array.Length; i++)
+                {
+                    array[i].Replace("]", "");                     //get some uniform ending...
+                    if (array[i][array[i].Length - 2] == ':')     //this Dat entry is actually referring
+                        Result.Add((ushort)(Address + i - 1));
+                }
             }
             return Result;
         }
 
 
-        private bool IsReferring(ushort Temp)
+        //private bool IsReferring(ushort Temp)
+        //{
+        //    switch (Temp)
+        //    {
+        //        case 0x10:
+        //        case 0x11:
+        //        case 0x12:
+        //        case 0x13:
+        //        case 0x14:
+        //        case 0x15:
+        //        case 0x16:
+        //        case 0x17:
+        //        case 0x1A:
+        //        case 0x1E:
+        //            return true;
+        //        default:
+        //            return false;
+        //    }
+        //}
+        internal ushort GetAdress()
         {
-            switch (Temp)
-            {
-                case 0x10:
-                case 0x11:
-                case 0x12:
-                case 0x13:
-                case 0x14:
-                case 0x15:
-                case 0x16:
-                case 0x17:
-                case 0x1A:
-                case 0x1E:
-                    return true;
-                default:
-                    return false;
-            }
+            return Address;
         }
     }
 }

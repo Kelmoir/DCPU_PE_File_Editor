@@ -18,7 +18,7 @@ namespace PE_File_Exporter
         List<cListfileEntry> ExportLabels;
         List<cListfileEntry> ImportLabels;
         string HeaderName;
-        string ImportName;      //todo: chack is correct that way, don't know why there are names at all
+        string ImportName;      //todo: check is correct that way, don't know why there are names at all
         private bool CreateOwnThread;
 
         internal FileManager()
@@ -140,6 +140,8 @@ namespace PE_File_Exporter
         {
             try
             {
+                if (UpperIndex < 0)
+                    return false;
                 if (ListToWorkOn == ListName.Export)
                     ExportLabels.Reverse(UpperIndex, 2);
                 else if (ListToWorkOn == ListName.Import)
@@ -177,19 +179,27 @@ namespace PE_File_Exporter
             Output.Add((ushort)(Output.Count + 1 + ImportLabels.Count + ExportTable.Count + Executable.Count));        //relocation Table Adress
             Output.Add((ushort)Executable.Count);        //Size of the Executable image 
             foreach (ushort Item in ImportTable)
-                Output.Add((ushort)(Item + ExecutableOffset));
+                Output.Add((ushort)Item);
             foreach (ushort Item in ExportTable)
-                Output.Add((ushort)(Item + ExecutableOffset));
+                Output.Add((ushort)Item);
             Output.AddRange(Executable);
             foreach (ushort Item in RelocationTable)
-                Output.Add((ushort)(Item + ExecutableOffset));
+                Output.Add((ushort)Item);
 
             
         }
 
         private List<ushort> CreateRelocationTable()
         {
-            throw new NotImplementedException();
+            List<ushort> Result = new List<ushort>();
+            List<ushort> Temp;
+            foreach (cListfileEntry Item in ActualReadOut)
+            {
+                Temp = Item.GetRefenencedLabels();
+                foreach (ushort ItemUshort in Temp)     //doing ushort by ushort to make a deep copy
+                    Result.Add(ItemUshort);
+            }
+            return Result;
         }
 
         private List<ushort> ObtainExecutableImage()
@@ -199,7 +209,7 @@ namespace PE_File_Exporter
             foreach (cListfileEntry Item in ActualReadOut)
             {
                 Temp = Item.GetBinary();
-                foreach (ushort ItemUshort in Temp)
+                foreach (ushort ItemUshort in Temp)     //doing ushort by ushort to make a deep copy
                     Result.Add(ItemUshort);
             }
             return Result;
@@ -207,12 +217,26 @@ namespace PE_File_Exporter
 
         private List<ushort> CreateExportTable()
         {
-            throw new NotImplementedException();
+            List<ushort> Result = new List<ushort>();
+            foreach (cListfileEntry Item in ExportLabels)
+                Result.Add(Item.GetAdress());
+            if (Result.Count == 0)
+                Result.Add(0);
+            else
+                Result.Add(0xFFFF);
+            return Result;
         }
 
-        private List<ushort> CreateImportTable()
+        private List<ushort> CreateImportTable()       //TODO: change so it actually reassembles a list of import Tables...
         {
-            throw new NotImplementedException();
+            List<ushort> Result = new List<ushort>();
+            foreach (cListfileEntry Item in ImportLabels)
+                Result.Add(Item.GetAdress());
+            if (Result.Count == 0)
+                Result.Add(0);
+            else
+                Result.Add(0xFFFF);
+            return Result;
         }
     }
 }
