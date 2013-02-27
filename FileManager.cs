@@ -17,6 +17,8 @@ namespace PE_File_Exporter
         List<cListfileEntry> UnassignedLabels;
         List<cListfileEntry> ExportLabels;
         List<cListfileEntry> ImportLabels;
+        cListfileEntry EntryPoint;
+        List<ushort> RelocationTable;               //TODO fill from somewhere :x won't calculate it
         string HeaderName;
         string ImportName;      //todo: check is correct that way, don't know why there are names at all
         private bool CreateOwnThread;
@@ -27,6 +29,7 @@ namespace PE_File_Exporter
             UnassignedLabels = new List<cListfileEntry>();
             ExportLabels = new List<cListfileEntry>();
             ImportLabels = new List<cListfileEntry>();
+            EntryPoint = null;
             CreateOwnThread = false;
         }
 
@@ -165,13 +168,13 @@ namespace PE_File_Exporter
             List<ushort> ExportTable = CreateExportTable();
             List<ushort> Executable = ObtainExecutableImage();
             List<ushort> MD5List = DCPU_Utilitys.cHexInterface.ConvertToUshortList(MD5);
-            List<ushort> RelocationTable = CreateRelocationTable();
+            //TODO: Relocation table anyone?
             ushort ExecutableOffset = (ushort)(Output.Count + 4 + ImportLabels.Count + ExportTable.Count);
             Output.Add(0x010c);     //Header
             Output.Add(0xFFFF);     //next header, for now not existant 
             Output.AddRange(MD5List);
             if (CreateOwnThread)        //RVA entry point
-                Output.Add(ExecutableOffset);
+                Output.Add(EntryPoint.GetAdress());
             else
                 Output.Add(0x0000);
             Output.Add((ushort)(Output.Count + 3));        //Import Table Adress
@@ -187,19 +190,6 @@ namespace PE_File_Exporter
                 Output.Add((ushort)Item);
 
             
-        }
-
-        private List<ushort> CreateRelocationTable()
-        {
-            List<ushort> Result = new List<ushort>();
-            List<ushort> Temp;
-            foreach (cListfileEntry Item in ActualReadOut)
-            {
-                Temp = Item.GetRefenencedLabels();
-                foreach (ushort ItemUshort in Temp)     //doing ushort by ushort to make a deep copy
-                    Result.Add(ItemUshort);
-            }
-            return Result;
         }
 
         private List<ushort> ObtainExecutableImage()
@@ -237,6 +227,36 @@ namespace PE_File_Exporter
             else
                 Result.Add(0xFFFF);
             return Result;
+        }
+
+        /// <summary>
+        /// Gets the Name of the main Entry point
+        /// </summary>
+        /// <returns></returns>
+        internal string GetEntyPointName()
+        {
+            if (CreateOwnThread && EntryPoint != null)
+                return EntryPoint.GetLabel();
+            else
+                return "";
+        }
+
+        internal void SelectNewEntryPoint()
+        {
+            List<cListfileEntry> Entrys = new List<cListfileEntry>();
+            Entrys.AddRange(UnassignedLabels);
+            Entrys.AddRange(ExportLabels);
+            SelectEntryPoint NewPoint = new SelectEntryPoint(Entrys, EntryPoint);
+            if (NewPoint.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                EntryPoint = NewPoint.GetEntryPoint();
+                CreateOwnThread = true;
+            }
+        }
+        internal void DeleteEntryPoint()
+        {
+            EntryPoint = null;
+            CreateOwnThread = false;
         }
     }
 }

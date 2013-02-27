@@ -14,3 +14,4 @@ C:\Users\Kelmoir\Documents\Visual Studio 2008\Projects\DCPU_PE_File_Editor\obj\D
 C:\Users\Kelmoir\Documents\Visual Studio 2008\Projects\DCPU_PE_File_Editor\obj\Debug\PE File Exporter.csproj.GenerateResource.Cache
 C:\Users\Kelmoir\Documents\Visual Studio 2008\Projects\DCPU_PE_File_Editor\bin\Debug\PE File Exporter.exe
 C:\Users\Kelmoir\Documents\Visual Studio 2008\Projects\DCPU_PE_File_Editor\bin\Debug\PE File Exporter.pdb
+C:\Users\Kelmoir\Documents\Visual Studio 2008\Projects\DCPU_PE_File_Editor\obj\Debug\PE_File_Exporter.SelectEntryPoint.resources

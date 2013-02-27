@@ -96,5 +96,17 @@ namespace PE_File_Exporter
             WorkingFile.Export(MD5calcFromSpec.CalcMD5(tbSpecFunction.Text, tbSpecName.Text, tbSpecPublisher.Text, cbRevMaj.SelectedIndex, cbRefMin.SelectedIndex));
         }
 
+        private void btSelectEntryPoint_Click(object sender, EventArgs e)
+        {
+            WorkingFile.SelectNewEntryPoint();
+            tbEntryPoint.Text = WorkingFile.GetEntyPointName();
+        }
+
+        private void btDeleteEntryPoint_Click(object sender, EventArgs e)
+        {
+            WorkingFile.DeleteEntryPoint();
+            tbEntryPoint.Text = WorkingFile.GetEntyPointName();
+        }
+
     }
 }

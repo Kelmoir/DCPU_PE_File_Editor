@@ -49,6 +49,10 @@
             this.btExportEntryDown = new System.Windows.Forms.Button();
             this.btImportListEntryDown = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.btDeleteEntryPoint = new System.Windows.Forms.Button();
+            this.btSelectEntryPoint = new System.Windows.Forms.Button();
+            this.tbEntryPoint = new System.Windows.Forms.TextBox();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.cbRefMin = new System.Windows.Forms.ComboBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
@@ -60,6 +64,7 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.tbSpecFunction = new System.Windows.Forms.TextBox();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
@@ -70,12 +75,12 @@
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.groupBox16.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.groupBox8.SuspendLayout();
             this.groupBox7.SuspendLayout();
@@ -281,6 +286,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.groupBox16);
             this.groupBox4.Controls.Add(this.groupBox9);
             this.groupBox4.Controls.Add(this.groupBox8);
             this.groupBox4.Controls.Add(this.groupBox7);
@@ -288,10 +294,49 @@
             this.groupBox4.Controls.Add(this.groupBox5);
             this.groupBox4.Location = new System.Drawing.Point(0, 27);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(207, 211);
+            this.groupBox4.Size = new System.Drawing.Size(207, 315);
             this.groupBox4.TabIndex = 13;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "export Header specifications";
+            // 
+            // groupBox16
+            // 
+            this.groupBox16.Controls.Add(this.btDeleteEntryPoint);
+            this.groupBox16.Controls.Add(this.btSelectEntryPoint);
+            this.groupBox16.Controls.Add(this.tbEntryPoint);
+            this.groupBox16.Location = new System.Drawing.Point(6, 209);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(195, 88);
+            this.groupBox16.TabIndex = 18;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Entry point for own thread";
+            // 
+            // btDeleteEntryPoint
+            // 
+            this.btDeleteEntryPoint.Location = new System.Drawing.Point(100, 45);
+            this.btDeleteEntryPoint.Name = "btDeleteEntryPoint";
+            this.btDeleteEntryPoint.Size = new System.Drawing.Size(88, 36);
+            this.btDeleteEntryPoint.TabIndex = 20;
+            this.btDeleteEntryPoint.Text = "Delete entry point";
+            this.btDeleteEntryPoint.UseVisualStyleBackColor = true;
+            this.btDeleteEntryPoint.Click += new System.EventHandler(this.btDeleteEntryPoint_Click);
+            // 
+            // btSelectEntryPoint
+            // 
+            this.btSelectEntryPoint.Location = new System.Drawing.Point(6, 45);
+            this.btSelectEntryPoint.Name = "btSelectEntryPoint";
+            this.btSelectEntryPoint.Size = new System.Drawing.Size(88, 36);
+            this.btSelectEntryPoint.TabIndex = 19;
+            this.btSelectEntryPoint.Text = "Set new entry point";
+            this.btSelectEntryPoint.UseVisualStyleBackColor = true;
+            this.btSelectEntryPoint.Click += new System.EventHandler(this.btSelectEntryPoint_Click);
+            // 
+            // tbEntryPoint
+            // 
+            this.tbEntryPoint.Location = new System.Drawing.Point(6, 19);
+            this.tbEntryPoint.Name = "tbEntryPoint";
+            this.tbEntryPoint.Size = new System.Drawing.Size(182, 20);
+            this.tbEntryPoint.TabIndex = 19;
             // 
             // groupBox9
             // 
@@ -417,6 +462,15 @@
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "import Header specifications";
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(6, 209);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(195, 42);
+            this.button1.TabIndex = 18;
+            this.button1.Text = "Search for an external lib/driver";
+            this.button1.UseVisualStyleBackColor = true;
+            // 
             // groupBox11
             // 
             this.groupBox11.Controls.Add(this.comboBox1);
@@ -526,20 +580,11 @@
             this.textBox3.Size = new System.Drawing.Size(183, 20);
             this.textBox3.TabIndex = 14;
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(6, 209);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(195, 42);
-            this.button1.TabIndex = 18;
-            this.button1.Text = "Search for an external lib/driver";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1120, 344);
+            this.ClientSize = new System.Drawing.Size(1120, 346);
             this.Controls.Add(this.groupBox10);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.btImportListEntryDown);
@@ -563,6 +608,8 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.groupBox9.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
@@ -630,6 +677,10 @@
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.GroupBox groupBox16;
+        private System.Windows.Forms.TextBox tbEntryPoint;
+        private System.Windows.Forms.Button btDeleteEntryPoint;
+        private System.Windows.Forms.Button btSelectEntryPoint;
     }
 }
 

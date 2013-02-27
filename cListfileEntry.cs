@@ -9,7 +9,7 @@ namespace PE_File_Exporter
     {}
     class NoArgumentB : Exception
     { }
-
+    internal enum ReferencingParameter { none = 0, A = 1, B = 2, Both = 3};
     class cListfileEntry
     {
         private string ListReadout;
@@ -140,6 +140,7 @@ namespace PE_File_Exporter
         }
         #endregion
 
+        #region Is Instruction?
         internal bool IsInstruction()
         {
             string[] Parts = AssemblerCode.Split(' ');
@@ -202,17 +203,23 @@ namespace PE_File_Exporter
                 return false;
             }
         }
+        #endregion
 
+        #region Is unimportant?
         internal bool IsUnimportant()
         {
             return (!Label && (Opcodes.Count == 0));
         }
+        #endregion
 
+        #region IsLabel?
         internal bool IsLabel()
         {
             return Label;
         }
+        #endregion
 
+        #region Is local label?
         internal bool IsLocalLabel()
         {
             if (HowTo == ListFiletype.Organic)
@@ -224,12 +231,16 @@ namespace PE_File_Exporter
                 return false;
             }
         }
+        #endregion
 
+        #region Set HowToParse
         internal void SetHowToParse(ListFiletype NewHowTo)
         {
             HowTo = NewHowTo;
         }
+        #endregion
 
+        #region resolve local labels to global naming space
         internal void PrecendLabel(string PreName)
         {
             if (HowTo == ListFiletype.Organic)
@@ -237,7 +248,9 @@ namespace PE_File_Exporter
                 AssemblerCode = PreName + "_" + AssemblerCode.Substring(1);
             }
         }
+        #endregion
 
+        #region various getters
         internal string GetLabel()
         {
             if (IsLabel())
@@ -254,21 +267,21 @@ namespace PE_File_Exporter
             else
                 throw new Exception("This list entry is not a Label.");
         }
-        internal ushort getOpcode()
+        internal ushort GetOpcode()
         {
             if (Instruction)
                 return Opcodes[0];
             else
                 throw new NoInstructionException();
         }
-        internal ushort getArgA()
+        internal ushort GetArgA()
         {
             if (Instruction)
                 return Opcodes[1];
             else
                 throw new NoInstructionException();
         }
-        internal ushort getArgB()
+        internal ushort GetArgB()
         {
             if (Instruction)
             {
@@ -289,26 +302,32 @@ namespace PE_File_Exporter
             else
                 throw new NoInstructionException();
         }
+        internal ushort GetAdress()
+        {
+            return Address;
+        }
+        #endregion
+
+        //TODO: remove????
 
         /// <summary>
-        /// will return the abolute adresses addresses  of the Labels (not the addresses they are referring to!)
+        /// will return the absolute adresses addresses  of the Labels (not the addresses they are referring to!)
         /// </summary>
         /// <returns>the List of the Adresses, can be empty, but not null</returns>
         internal List<ushort> GetRefenencedLabels()
         {
             //How to? well, we know what the actual opcode is. Thus, just parse it, and determine whether A or B are referencing...
             List<ushort> Result = new List<ushort>();
-            //if (IsInstruction())
-            //{
-            //    ushort Temp = (Opcodes[0] >> 10) & 0x3F;
-            //    if (IsReferring(Temp))
-            //        Result.Add((ushort)(Address + 1));
-            //    Temp = (Opcodes[0] >> 5) & 0x1F;
-            //    if (IsReferring(Temp))
-            //        Result.Add((ushort)(Address + Opcodes.Count -1));     //B will always refer to the last Instruction
-            //}
-            //else 
-            if (Instruction || AssemblerCode.Substring(0, 4) == ".dat")    //in case of Vector Tables...
+            if (IsInstruction())
+            {
+                ushort Temp = (ushort)((Opcodes[0] >> 10) & 0x3F);
+                if (IsReferringParameter(Temp))
+                    Result.Add((ushort)(Address + 1));
+                Temp = (ushort)((Opcodes[0] >> 5) & 0x1F);
+                if (IsReferringParameter(Temp))
+                    Result.Add((ushort)(Address + Opcodes.Count - 1));     //B will always refer to the last Instruction
+            }
+            else if (Instruction || AssemblerCode.Substring(0, 4) == ".dat")    //in case of Vector Tables...
             {
                 string[] seperator = new string[1];
                 seperator[0] = " ";
@@ -324,28 +343,25 @@ namespace PE_File_Exporter
         }
 
 
-        //private bool IsReferring(ushort Temp)
-        //{
-        //    switch (Temp)
-        //    {
-        //        case 0x10:
-        //        case 0x11:
-        //        case 0x12:
-        //        case 0x13:
-        //        case 0x14:
-        //        case 0x15:
-        //        case 0x16:
-        //        case 0x17:
-        //        case 0x1A:
-        //        case 0x1E:
-        //            return true;
-        //        default:
-        //            return false;
-        //    }
-        //}
-        internal ushort GetAdress()
+        private bool IsReferringParameter(ushort Temp)
         {
-            return Address;
+            switch (Temp)
+            {
+                case 0x10:
+                case 0x11:
+                case 0x12:
+                case 0x13:
+                case 0x14:
+                case 0x15:
+                case 0x16:
+                case 0x17:
+                case 0x1A:
+                case 0x1E:
+                    return true;
+                default:
+                    return false;
+            }
         }
+
     }
 }
