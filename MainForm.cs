@@ -30,34 +30,34 @@ namespace PE_File_Exporter
         private void UpdateLists()
         {
             WorkingFile.UpdateExportList(lbExportEntrys);
-            WorkingFile.UpdateImportList(lbImportEntrys);
+            WorkingFile.UpdateImportList(lbImportEntrys, cbImportHeaderSelect.SelectedIndex);
             WorkingFile.UpdateUnusedList(lbUnusedEntrys);
         }
         #region Moving entrys
         private void btAddtoExportList_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.MoveEntrys(ListName.Unassigned, ListName.Export, lbUnusedEntrys.SelectedIndex))
+            if (WorkingFile.MoveEntrys(ListName.Unassigned, ListName.Export, lbUnusedEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
                 UpdateLists();
         }
         private void btRemoveFromExportList_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.MoveEntrys(ListName.Export, ListName.Unassigned, lbExportEntrys.SelectedIndex))
+            if (WorkingFile.MoveEntrys(ListName.Export, ListName.Unassigned, lbExportEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
                 UpdateLists();
         }
         private void btRemoveFromImportList_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.MoveEntrys(ListName.Import, ListName.Unassigned, lbImportEntrys.SelectedIndex))
+            if (WorkingFile.MoveEntrys(ListName.Import, ListName.Unassigned, lbImportEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
                 UpdateLists();
         }
         private void btAddToImportList_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.MoveEntrys(ListName.Unassigned, ListName.Import, lbUnusedEntrys.SelectedIndex))
+            if (WorkingFile.MoveEntrys(ListName.Unassigned, ListName.Import, lbUnusedEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
                 UpdateLists();
         }
 
         private void btExportEntryUp_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.SwitchElements(ListName.Export, lbExportEntrys.SelectedIndex - 1))
+            if (WorkingFile.SwitchElements(ListName.Export, lbExportEntrys.SelectedIndex - 1, cbImportHeaderSelect.SelectedIndex))
             {
                 lbExportEntrys.SelectedIndex--;
                 UpdateLists();
@@ -65,7 +65,7 @@ namespace PE_File_Exporter
         }
         private void btExportEntryDown_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.SwitchElements(ListName.Export, lbExportEntrys.SelectedIndex))
+            if (WorkingFile.SwitchElements(ListName.Export, lbExportEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
             {
                 lbExportEntrys.SelectedIndex++;
                 UpdateLists();
@@ -74,7 +74,7 @@ namespace PE_File_Exporter
 
         private void btImportListEntryUp_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.SwitchElements(ListName.Import, lbImportEntrys.SelectedIndex - 1))
+            if (WorkingFile.SwitchElements(ListName.Import, lbImportEntrys.SelectedIndex - 1, cbImportHeaderSelect.SelectedIndex))
             {
                 lbImportEntrys.SelectedIndex--;
                 UpdateLists();
@@ -83,7 +83,7 @@ namespace PE_File_Exporter
 
         private void btImportListEntryDown_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.SwitchElements(ListName.Import, lbImportEntrys.SelectedIndex))
+            if (WorkingFile.SwitchElements(ListName.Import, lbImportEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
             {
                 lbImportEntrys.SelectedIndex++;
                 UpdateLists();

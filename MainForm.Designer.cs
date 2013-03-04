@@ -72,7 +72,7 @@
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.cbImportHeaderSelect = new System.Windows.Forms.ComboBox();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
@@ -457,7 +457,7 @@
             this.groupBox10.Controls.Add(this.groupBox15);
             this.groupBox10.Location = new System.Drawing.Point(908, 27);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(207, 257);
+            this.groupBox10.Size = new System.Drawing.Size(207, 315);
             this.groupBox10.TabIndex = 18;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "import Header specifications";
@@ -548,25 +548,26 @@
             // 
             // groupBox14
             // 
-            this.groupBox14.Controls.Add(this.textBox2);
-            this.groupBox14.Location = new System.Drawing.Point(6, 65);
+            this.groupBox14.Controls.Add(this.cbImportHeaderSelect);
+            this.groupBox14.Location = new System.Drawing.Point(6, 19);
             this.groupBox14.Name = "groupBox14";
             this.groupBox14.Size = new System.Drawing.Size(195, 42);
             this.groupBox14.TabIndex = 15;
             this.groupBox14.TabStop = false;
-            this.groupBox14.Text = "Spec Name (20 chars)";
+            this.groupBox14.Text = "Import Header Name";
             // 
-            // textBox2
+            // cbImportHeaderSelect
             // 
-            this.textBox2.Location = new System.Drawing.Point(6, 16);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(183, 20);
-            this.textBox2.TabIndex = 15;
+            this.cbImportHeaderSelect.FormattingEnabled = true;
+            this.cbImportHeaderSelect.Location = new System.Drawing.Point(6, 16);
+            this.cbImportHeaderSelect.Name = "cbImportHeaderSelect";
+            this.cbImportHeaderSelect.Size = new System.Drawing.Size(182, 21);
+            this.cbImportHeaderSelect.TabIndex = 0;
             // 
             // groupBox15
             // 
             this.groupBox15.Controls.Add(this.textBox3);
-            this.groupBox15.Location = new System.Drawing.Point(6, 19);
+            this.groupBox15.Location = new System.Drawing.Point(6, 67);
             this.groupBox15.Name = "groupBox15";
             this.groupBox15.Size = new System.Drawing.Size(195, 42);
             this.groupBox15.TabIndex = 14;
@@ -624,7 +625,6 @@
             this.groupBox13.ResumeLayout(false);
             this.groupBox13.PerformLayout();
             this.groupBox14.ResumeLayout(false);
-            this.groupBox14.PerformLayout();
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
             this.ResumeLayout(false);
@@ -673,7 +673,6 @@
         private System.Windows.Forms.GroupBox groupBox13;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.GroupBox groupBox14;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.GroupBox groupBox15;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Button button1;
@@ -681,6 +680,7 @@
         private System.Windows.Forms.TextBox tbEntryPoint;
         private System.Windows.Forms.Button btDeleteEntryPoint;
         private System.Windows.Forms.Button btSelectEntryPoint;
+        private System.Windows.Forms.ComboBox cbImportHeaderSelect;
     }
 }
 

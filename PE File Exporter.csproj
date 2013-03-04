@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="cHeaderData.cs" />
     <Compile Include="cHexInterface.cs" />
     <Compile Include="cListfileEntry.cs" />
     <Compile Include="cListFileLoader.cs" />

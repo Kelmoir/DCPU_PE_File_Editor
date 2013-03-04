@@ -11,17 +11,16 @@ namespace PE_File_Exporter
 {
     internal partial class SelectEntryPoint : Form
     {
-        private List<cListfileEntry> Entrys;
-        private cListfileEntry EntryPoint;
+        private List<string> Entrys;
+        private string EntryPoint;
 
-        internal SelectEntryPoint(List<cListfileEntry> NewEntrys, cListfileEntry NewEntryPoint)
+        internal SelectEntryPoint(List<string> NewEntrys)
         {
             InitializeComponent();
             Entrys = NewEntrys;
-            EntryPoint = NewEntryPoint;
-            foreach (cListfileEntry Item in Entrys)
+            foreach (string Item in NewEntrys)
             {
-                lbEntrys.Items.Add(Item.GetLabel());
+                lbEntrys.Items.Add(Item);
             }
         }
 
@@ -45,7 +44,7 @@ namespace PE_File_Exporter
             this.Close();
         }
 
-        internal cListfileEntry GetEntryPoint()
+        internal string GetEntryPointLabel()
         {
             return EntryPoint;
         }
