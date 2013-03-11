@@ -12,11 +12,13 @@ namespace PE_File_Exporter
     public partial class MainForm : Form
     {
         FileManager WorkingFile;
+        List<cHeaderData> AvaiableLibs;
 
         public MainForm()
         {
             InitializeComponent();
             WorkingFile = new FileManager();
+            AvaiableLibs = new List<cHeaderData>();
         }
 
         private void openBinFileToolStripMenuItem_Click(object sender, EventArgs e)
@@ -36,22 +38,22 @@ namespace PE_File_Exporter
         #region Moving entrys
         private void btAddtoExportList_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.MoveEntrys(ListName.Unassigned, ListName.Export, lbUnusedEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
+            if (WorkingFile.MoveEntrys(ListName.Unassigned, ListName.Export, lbUnusedEntrys.SelectedIndex))
                 UpdateLists();
         }
         private void btRemoveFromExportList_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.MoveEntrys(ListName.Export, ListName.Unassigned, lbExportEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
+            if (WorkingFile.MoveEntrys(ListName.Export, ListName.Unassigned, lbExportEntrys.SelectedIndex))
                 UpdateLists();
         }
         private void btRemoveFromImportList_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.MoveEntrys(ListName.Import, ListName.Unassigned, lbImportEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
+            if (WorkingFile.RemoveImport(lbImportEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
                 UpdateLists();
         }
         private void btAddToImportList_Click(object sender, EventArgs e)
         {
-            if (WorkingFile.MoveEntrys(ListName.Unassigned, ListName.Import, lbUnusedEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex))
+            if (WorkingFile.AddImport(lbUnusedEntrys.SelectedIndex, cbImportHeaderSelect.SelectedIndex, lbAvaiableItemsForImport.SelectedIndex))
                 UpdateLists();
         }
 

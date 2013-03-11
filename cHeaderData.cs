@@ -12,21 +12,21 @@ namespace PE_File_Exporter
     {
         List<cListfileEntry> UnassignedLabels;
         List<cListfileEntry> ExportLabels;
-        List<List<cListfileEntry>> ImportLabels;
+        List<cImportHeader> ImportLibs;
 
 
         internal cHeaderData()
         {
             UnassignedLabels = new List<cListfileEntry>();
             ExportLabels = new List<cListfileEntry>();
-            ImportLabels = new List<List<cListfileEntry>>();
+            ImportLibs = new List<cImportHeader>();
         }
 
         internal void ClearLists()
         {
             UnassignedLabels.Clear();
             ExportLabels.Clear();
-            ImportLabels.Clear();
+            ImportLibs.Clear();
         }
 
         internal void SetUnassignedLabels(List<cListfileEntry> Entrys)
@@ -83,10 +83,7 @@ namespace PE_File_Exporter
         {
             try
             {
-                List<string> Result = new List<string>();
-                foreach (cListfileEntry Item in ImportLabels[Index])
-                    Result.Add(Item.GetLabel());
-                return Result;
+                return ImportLibs[Index].GetLabelList();
             }
             catch
             {
@@ -105,34 +102,34 @@ namespace PE_File_Exporter
         /// <param name="SourceIndex"></param>
         /// <param name="ImportHeaderIndex"></param>
         /// <returns></returns>
-        internal bool MoveEntrys(ListName Source, ListName Destination, int SourceIndex, int ImportHeaderIndex)
+        internal bool MoveEntrys(ListName Source, ListName Destination, int SourceIndex)
         {
-            List<cListfileEntry> SourceList;
-            List<cListfileEntry> DestList;
-            if (Source == ListName.Export)
-                SourceList = ExportLabels;
-            else if (Source == ListName.Import)
-                if ((ImportLabels.Count > ImportHeaderIndex) && (ImportHeaderIndex > -1))
-                    SourceList = ImportLabels[ImportHeaderIndex];
-                else
-                    return false;
-            else
-                SourceList = UnassignedLabels;
-
-            if (Destination == ListName.Export)
-                DestList = ExportLabels;
-            else if (Destination == ListName.Import)
-                if ((ImportLabels.Count > ImportHeaderIndex) && (ImportHeaderIndex > -1))
-                    DestList = ImportLabels[ImportHeaderIndex];
-                else
-                    return false;
-            else
-                DestList = UnassignedLabels;
-
             try
             {
-                DestList.Add(SourceList[SourceIndex]);
-                SourceList.RemoveAt(SourceIndex);
+                cListfileEntry MoveItem;
+
+                if (Source == ListName.Export)
+                {
+                    MoveItem = ExportLabels[SourceIndex];
+                    ExportLabels.RemoveAt(SourceIndex);
+                }
+                else if (Source == ListName.Unassigned)
+                {
+                    MoveItem = UnassignedLabels[SourceIndex];
+                    UnassignedLabels.RemoveAt(SourceIndex);
+                }
+                else
+                    return false;
+
+                if (Destination == ListName.Export)
+                    ExportLabels.Add(MoveItem);
+                else if (Destination == ListName.Unassigned)
+                {
+                    UnassignedLabels.Add(MoveItem);
+                }
+                else
+                    return false;
+
                 return true;
             }
             catch
@@ -156,10 +153,12 @@ namespace PE_File_Exporter
                 if (ListToWorkOn == ListName.Export)
                     ExportLabels.Reverse(UpperIndex, 2);
                 else if (ListToWorkOn == ListName.Import)
-                    if ((ImportLabels.Count > ImportHeaderIndex) && (ImportHeaderIndex > -1))
-                        ImportLabels[ImportHeaderIndex].Reverse(UpperIndex, 2);
+                    if ((ImportLibs.Count > ImportHeaderIndex) && (ImportHeaderIndex > -1))
+                        ImportLibs[ImportHeaderIndex].ReverseImports(UpperIndex, 2);
                     else
-                        UnassignedLabels.Reverse(UpperIndex, 2);
+                        return false;
+                else
+                    UnassignedLabels.Reverse(UpperIndex, 2);
                 return true;
             }
             catch
@@ -185,10 +184,9 @@ namespace PE_File_Exporter
         internal List<ushort> CreateImportTable()       //TODO: change so it actually reassembles a list of import Tables...
         {
             List<ushort> Result = new List<ushort>();
-            foreach (List<cListfileEntry> ListItem in ImportLabels)
+            foreach (cImportHeader Item in ImportLibs)
             {
-                foreach (cListfileEntry Item in ListItem)
-                    Result.Add(Item.GetAdress());
+                Result.AddRange(Item.CreateImportTable());
             }
             if (Result.Count == 0)
                 Result.Add(0);
@@ -212,15 +210,25 @@ namespace PE_File_Exporter
                 if (Item.GetLabel() == LabelOfEntry)
                     return Item;
             }
-            foreach (List<cListfileEntry> ListItem in ImportLabels)
+            foreach (cImportHeader Item in ImportLibs)
             {
-                foreach (cListfileEntry Item in ListItem)
-                {
-                    if (Item.GetLabel() == LabelOfEntry)
-                        return Item;
-                }
+                cListfileEntry TempItem = Item.FindEntryByName(LabelOfEntry);
+                if (TempItem != null)
+                    return TempItem;
             }
             return new cListfileEntry("");
+        }
+
+        /// <summary>
+        /// Creates an Saving string, that can be saved and loaded later
+        /// </summary>
+        /// <returns>the save string</returns>
+        internal string CreateSavestring()
+        {
+            string Savestring = "--ExportLabels:\r\n";
+            foreach (cListfileEntry Item in ExportLabels)
+                Savestring += Item.CreateSavestring();
+            return Savestring;
         }
     }
 }

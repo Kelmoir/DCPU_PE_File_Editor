@@ -75,6 +75,8 @@
             this.cbImportHeaderSelect = new System.Windows.Forms.ComboBox();
             this.groupBox15 = new System.Windows.Forms.GroupBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
+            this.lbAvaiableItemsForImport = new System.Windows.Forms.ListBox();
+            this.groupBox17 = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -92,6 +94,7 @@
             this.groupBox13.SuspendLayout();
             this.groupBox14.SuspendLayout();
             this.groupBox15.SuspendLayout();
+            this.groupBox17.SuspendLayout();
             this.SuspendLayout();
             // 
             // lbExportEntrys
@@ -111,7 +114,7 @@
             this.filesToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1120, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1322, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -449,6 +452,7 @@
             // 
             // groupBox10
             // 
+            this.groupBox10.Controls.Add(this.groupBox17);
             this.groupBox10.Controls.Add(this.button1);
             this.groupBox10.Controls.Add(this.groupBox11);
             this.groupBox10.Controls.Add(this.groupBox12);
@@ -457,7 +461,7 @@
             this.groupBox10.Controls.Add(this.groupBox15);
             this.groupBox10.Location = new System.Drawing.Point(908, 27);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(207, 315);
+            this.groupBox10.Size = new System.Drawing.Size(408, 315);
             this.groupBox10.TabIndex = 18;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "import Header specifications";
@@ -581,11 +585,32 @@
             this.textBox3.Size = new System.Drawing.Size(183, 20);
             this.textBox3.TabIndex = 14;
             // 
+            // lbAvaiableItemsForImport
+            // 
+            this.lbAvaiableItemsForImport.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.lbAvaiableItemsForImport.FormattingEnabled = true;
+            this.lbAvaiableItemsForImport.Location = new System.Drawing.Point(7, 19);
+            this.lbAvaiableItemsForImport.Name = "lbAvaiableItemsForImport";
+            this.lbAvaiableItemsForImport.Size = new System.Drawing.Size(181, 264);
+            this.lbAvaiableItemsForImport.TabIndex = 1;
+            // 
+            // groupBox17
+            // 
+            this.groupBox17.Controls.Add(this.lbAvaiableItemsForImport);
+            this.groupBox17.Location = new System.Drawing.Point(208, 19);
+            this.groupBox17.Name = "groupBox17";
+            this.groupBox17.Size = new System.Drawing.Size(194, 290);
+            this.groupBox17.TabIndex = 19;
+            this.groupBox17.TabStop = false;
+            this.groupBox17.Text = "Entrys avaiable for Import";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1120, 346);
+            this.ClientSize = new System.Drawing.Size(1322, 346);
             this.Controls.Add(this.groupBox10);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.btImportListEntryDown);
@@ -627,6 +652,7 @@
             this.groupBox14.ResumeLayout(false);
             this.groupBox15.ResumeLayout(false);
             this.groupBox15.PerformLayout();
+            this.groupBox17.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -681,6 +707,8 @@
         private System.Windows.Forms.Button btDeleteEntryPoint;
         private System.Windows.Forms.Button btSelectEntryPoint;
         private System.Windows.Forms.ComboBox cbImportHeaderSelect;
+        private System.Windows.Forms.GroupBox groupBox17;
+        private System.Windows.Forms.ListBox lbAvaiableItemsForImport;
     }
 }
 

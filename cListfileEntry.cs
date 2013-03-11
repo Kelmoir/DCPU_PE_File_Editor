@@ -363,5 +363,10 @@ namespace PE_File_Exporter
             }
         }
 
+
+        internal string CreateSavestring()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

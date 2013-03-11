@@ -93,13 +93,23 @@ namespace PE_File_Exporter
         #endregion
 
         #region move entrys around
-        internal bool MoveEntrys(ListName Source, ListName Destination, int SourceIndex, int ImportHeaderIndex)
+        internal bool MoveEntrys(ListName Source, ListName Destination, int SourceIndex)
         {
-            return Header.MoveEntrys(Source, Destination, SourceIndex, ImportHeaderIndex);
+            return Header.MoveEntrys(Source, Destination, SourceIndex);
         }
         internal bool SwitchElements(ListName ListToWorkOn, int UpperIndex, int ImportHeaderIndex)
         {
             return Header.SwitchElements(ListToWorkOn, UpperIndex, ImportHeaderIndex);
+        }
+
+        internal bool AddImport(int p, int p_2, int p_3)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal bool RemoveImport(int p, int p_2)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -180,5 +190,6 @@ namespace PE_File_Exporter
             EntryPoint = null;
             CreateOwnThread = false;
         }
+
     }
 }

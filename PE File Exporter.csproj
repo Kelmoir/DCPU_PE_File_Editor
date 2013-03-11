@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="cHeaderData.cs" />
     <Compile Include="cHexInterface.cs" />
+    <Compile Include="cImportHeader.cs" />
     <Compile Include="cListfileEntry.cs" />
     <Compile Include="cListFileLoader.cs" />
     <Compile Include="cListFileStructure.cs" />
