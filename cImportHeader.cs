@@ -9,31 +9,40 @@ namespace PE_File_Exporter
     {
         List<cListfileEntry> UnselectedImports;
         List<cListfileEntry> SelectedImports;
+        List<cListfileEntry> CorrespondingEntrys;
 
         internal cImportHeader()
         {
             UnselectedImports = new List<cListfileEntry>();
             SelectedImports = new List<cListfileEntry>();
+            CorrespondingEntrys = new List<cListfileEntry>();
         }
 
-        internal void AddImport(cListfileEntry Source)
+        internal void AddImport(cListfileEntry Source, int Index)
         {
-            throw new NotImplementedException();
+            CorrespondingEntrys.Add(Source);
+            SelectedImports.Add(UnselectedImports[Index]);
+            UnselectedImports.RemoveAt(Index);
         }
 
         internal void RemoveImport(int SourceIndex)
         {
-            throw new NotImplementedException();
+            UnselectedImports.Add(SelectedImports[SourceIndex]);
+            SelectedImports.RemoveAt(SourceIndex);
+            CorrespondingEntrys.RemoveAt(SourceIndex);
         }
 
-        internal void ReverseImports(int UpperIndex, int p)
+        internal void ReverseImports(int UpperIndex, int count)
         {
-            throw new NotImplementedException();
+            SelectedImports.Reverse(UpperIndex, count);
+            CorrespondingEntrys.Reverse(UpperIndex, count);
         }
 
         internal List<ushort> CreateImportTable()
         {
-            throw new NotImplementedException();
+            List<ushort> Result = new List<ushort>();
+            Result.Add(0);
+            return;
         }
 
         internal cListfileEntry GetImportEntry(int SourceIndex)

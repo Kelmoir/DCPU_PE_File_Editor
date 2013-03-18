@@ -102,14 +102,14 @@ namespace PE_File_Exporter
             return Header.SwitchElements(ListToWorkOn, UpperIndex, ImportHeaderIndex);
         }
 
-        internal bool AddImport(int p, int p_2, int p_3)
+        internal bool AddImport(int UnusedIndex, int HeaderIndex, int ImportEntryIndex)
         {
-            throw new NotImplementedException();
+            return Header.AddImport(UnusedIndex, HeaderIndex, ImportEntryIndex);
         }
 
-        internal bool RemoveImport(int p, int p_2)
+        internal bool RemoveImport(int ImportLabelIndex, int HeaderIndex)
         {
-            throw new NotImplementedException();
+            return Header.RemoveImport(ImportLabelIndex, HeaderIndex);
         }
 
         #endregion

@@ -137,6 +137,34 @@ namespace PE_File_Exporter
                 return false;
             }
         }
+
+        internal bool AddImport(int UnusedIndex, int HeaderIndex, int ImportEntryIndex)
+        {
+            try
+            {
+                ImportLibs[HeaderIndex].AddImport(UnassignedLabels[UnusedIndex], ImportEntryIndex);
+                UnassignedLabels.RemoveAt(UnusedIndex);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        internal bool RemoveImport(int ImportLabelIndex, int HeaderIndex)
+        {
+            try
+            {
+                UnassignedLabels.Add(ImportLibs[HeaderIndex].GetImportEntry(ImportLabelIndex);
+                ImportLibs[HeaderIndex].RemoveImport(ImportLabelIndex);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
         /// <summary>
         /// switches 2 elements of an List, according to everything...
         /// </summary>
